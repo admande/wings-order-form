@@ -1,59 +1,11 @@
 <h1>Wing Orders</h1>
 
-<%= form_for(@wing_order) do |f| %>
-  <% if @wing_order.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@wing_order.errors.count, "error") %> prohibited this wing order from being saved:</h2>
-
-      <ul>
-      <% @wing_order.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label(:customer_name, "Full Name") %><br>
-    <%= f.text_field :customer_name %>
-  </div>
-
-  <div class="field">
-    <%= f.label :city %><br>
-    <%= f.text_field :city %>
-  </div>
-
-  <div class="field">
-    <%= f.label(:state, "State") %>
-    <%= f.select(:state) do %>
-    <% @state_collection.each do |c| -%>
-      <%= content_tag(:option, c.first, value: c.last) %>
-    <% end %>
-  <% end %>
-  </div>
-
-
-<div class="field">
-    <%= f.label :quantity, "Quantity" %>
-    <%= f.collection_radio_buttons(:quantity, @quantity_collection, :first, :last)%>
-</div>
-
-
-
-  <div class="field">
-    <%= check_box_tag(:ranch_dressing) %>
-    <%= label_tag(:ranch_dressing, "Add Ranch Dressing") %>
-  </div>
-
-
-
-  <div class="field">
-      <%= f.label :flavor_ids, "Flavor" %>
-      <%= f.collection_check_boxes(:flavor_ids, @flavor_collection, :id, :name)%>
-  </div>
-
-
-  <div class="actions">
-    <%= f.submit "Place Order" %>
-  </div>
+<%= simple_form_for @wing_order do |f| %>
+  <%= f.input :customer_name, label: 'Full Name' %>
+  <%= f.input :city %>
+  <%= f.input :state, collection: @state_collection %>
+  <%= f.collection_radio_buttons :quantity, @quantity_collection, :first, :last %>
+  <%= f.input :ranch_dressing, label: "Add Ranch Dressing" %>
+  <%= f.association :flavors, as: :check_boxes %>
+  <%= f.submit "Place Order" %>
 <% end %>
